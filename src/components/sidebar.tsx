@@ -1,47 +1,36 @@
+// src/components/sidebar.tsx
+"use client";
+
 import Link from "next/link";
-import { LogOut } from "lucide-react";
-import { supabase } from "@/lib/supabase/client";
+import { usePathname } from "next/navigation";
+
+const navItems = [
+  { label: "Home", href: "/dashboard" },
+  { label: "Profile", href: "/dashboard/profile" },
+  { label: "Settings", href: "/dashboard/settings" },
+];
 
 export default function Sidebar() {
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = "/login";
-  };
+  const pathname = usePathname();
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-4 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-blue-800">Shipping Optimizer</h1>
-      </div>
-      <nav className="flex-1 p-4 space-y-2">
-        <Link
-          href="/dashboard"
-          className="flex items-center p-2 rounded-lg hover:bg-blue-100 text-blue-800"
-        >
-          Dashboard
-        </Link>
-        <Link
-          href="/pengiriman-baru"
-          className="flex items-center p-2 rounded-lg hover:bg-blue-100 text-blue-800"
-        >
-          Pengiriman Baru
-        </Link>
-        <Link
-          href="/riwayat-pengiriman"
-          className="flex items-center p-2 rounded-lg hover:bg-blue-100 text-blue-800"
-        >
-          Riwayat Pengiriman
-        </Link>
+    <aside className="w-64 bg-white p-4 border-r">
+      <h2 className="text-lg font-bold mb-6">Menu</h2>
+      <nav className="flex flex-col gap-2">
+        {navItems.map(({ label, href }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`px-3 py-2 rounded ${
+              pathname === href
+                ? "bg-blue-500 text-white"
+                : "hover:bg-gray-100 text-gray-700"
+            }`}
+          >
+            {label}
+          </Link>
+        ))}
       </nav>
-      <div className="p-4 border-t border-gray-200">
-        <button
-          onClick={handleLogout}
-          className="flex items-center w-full p-2 rounded-lg hover:bg-red-100 text-red-600"
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
-        </button>
-      </div>
-    </div>
+    </aside>
   );
 }

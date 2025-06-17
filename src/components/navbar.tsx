@@ -1,18 +1,22 @@
-import { supabase } from "@/lib/supabase/client";
+// src/components/navbar.tsx
+"use client";
 
-export default async function Navbar() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+import { useAuth } from "@/contexts/AuthContext";
+
+export default function Navbar() {
+  const { user, signOut } = useAuth();
 
   return (
-    <header className="bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-      <h2 className="text-lg font-semibold text-gray-800">Dashboard</h2>
-      <div className="flex items-center space-x-2">
-        <span className="text-sm text-gray-600">{user?.email}</span>
-        <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm">
-          {user?.email?.charAt(0).toUpperCase()}
-        </div>
+    <header className="bg-white shadow p-4 flex justify-between items-center">
+      <h1 className="text-xl font-semibold">Dashboard</h1>
+      <div className="flex items-center gap-4">
+        <span className="text-gray-700">{user?.email}</span>
+        <button
+          onClick={signOut}
+          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+        >
+          Logout
+        </button>
       </div>
     </header>
   );
